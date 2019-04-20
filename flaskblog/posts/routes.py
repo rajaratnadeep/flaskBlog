@@ -14,13 +14,15 @@ posts = Blueprint('posts', __name__)
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
-        picture_file = save_picture(form.picture.data)
-        post = Post(title=form.title.data,
-                    content=form.content.data, author=current_user, image_file=picture_file)
+        if (form.picture.data):
+            picture_file = save_picture(form.picture.data)
+        else:
+            picture_file='default1.jpg'
+        post = Post(title=form.title.data, content=form.content.data, author=current_user, image_file=picture_file, category=form.category.data)
 
         db.session.add(post)
         db.session.commit()
-        flash('Your message has been created!', 'success')
+        flash('Your post has been created!', 'success')
 
         return redirect(url_for('main.home'))
     return render_template('create_post.html', title='New Post', form=form, legend='New Post')
@@ -50,7 +52,7 @@ def update_post(post_id):
         form.content.data = post.content
     return render_template('create_post.html', title='Update Post', form=form, legend='Update Post')
 
-
+# route to delete posts
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
 def delete_post(post_id):
@@ -61,3 +63,13 @@ def delete_post(post_id):
     db.session.commit()
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('main.home'))
+
+
+# route to view posts by category
+@posts.route("/post/<string:category>")
+def cat_post(category):
+    page = request.args.get('page', 1, type=int)
+
+    posts = Post.query.filter_by(category=category).order_by(
+        Post.date_posted.desc()).paginate(page=page, per_page=5)
+    return render_template('cat_post.html', posts=posts, category=category)

@@ -9,4 +9,5 @@ class PostForm(FlaskForm):
     content = TextAreaField('Content', validators=[DataRequired()])
     picture = FileField('Update Post Picture', validators=[
                         FileAllowed(['jpg', 'png'])])
+    category = StringField('category', validators=[DataRequired()])
     submit = SubmitField('Post')

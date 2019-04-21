@@ -25,13 +25,20 @@ def new_post():
         flash('Your post has been created!', 'success')
 
         return redirect(url_for('main.home'))
-    return render_template('create_post.html', title='New Post', form=form, legend='New Post')
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+    return render_template('create_post.html', title='New Post', form=form, dis_cats=dis_cats, legend='New Post')
 
 
 @posts.route("/post/<int:post_id>")
 def post(post_id):
     post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, image_file=post.image_file, post=post)
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+
+    return render_template('post.html', title=post.title, image_file=post.image_file, post=post, dis_cats=dis_cats)
 
 
 @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
@@ -50,7 +57,11 @@ def update_post(post_id):
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
-    return render_template('create_post.html', title='Update Post', form=form, legend='Update Post')
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+
+    return render_template('create_post.html', title='Update Post', form=form, legend='Update Post', dis_cats=dis_cats)
 
 # route to delete posts
 @posts.route("/post/<int:post_id>/delete", methods=['POST'])
@@ -72,4 +83,8 @@ def cat_post(category):
 
     posts = Post.query.filter_by(category=category).order_by(
         Post.date_posted.desc()).paginate(page=page, per_page=5)
-    return render_template('cat_post.html', posts=posts, category=category)
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+
+    return render_template('cat_post.html', posts=posts, category=category, dis_cats=dis_cats)

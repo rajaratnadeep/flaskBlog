@@ -24,7 +24,11 @@ def register():
         db.session.commit()
         flash('Your account has been created! You are now able to login', 'success')
         return redirect(url_for('users.login'))
-    return render_template('register.html', title='Register', form=form)
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+
+    return render_template('register.html', title='Register', form=form, dis_cats=dis_cats)
 
 
 @users.route("/login", methods=['GET', 'POST'])
@@ -42,7 +46,11 @@ def login():
             return redirect(next_page) if next_page else redirect(url_for('main.home'))
         else:
             flash('Login Unsucessful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+
+    return render_template('login.html', title='Login', form=form, dis_cats=dis_cats)
 
 
 @users.route("/logout")
@@ -69,7 +77,11 @@ def account():
         form.email.data = current_user.email
     image_file = url_for(
         'static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account', image_file=image_file, form=form)
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+
+    return render_template('account.html', title='Account', image_file=image_file, form=form, dis_cats=dis_cats)
 
 
 @users.route("/user/<string:username>")
@@ -79,4 +91,8 @@ def user_posts(username):
     posts = Post.query.filter_by(author=user)\
         .order_by(Post.date_posted.desc())\
         .paginate(page=page, per_page=5)
-    return render_template('user_posts.html', posts=posts, user=user)
+    
+    dis_cats = []
+    for dis_cat in db.session.query(Post.category).distinct():
+        dis_cats.append(dis_cat.category)
+    return render_template('user_posts.html', posts=posts, user=user, dis_cats=dis_cats)

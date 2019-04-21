@@ -79,13 +79,13 @@
         </div>
         <div class="col-md-4">
           <div class="content-section">
-            <h3>Our Sidebar</h3>
-            <p class='text-muted'>You can put any information here you'd like.
+            <h3>All Categories</h3>
+            <p class='text-muted'>Choose the category you are interested in!
+              <!-- {{ dis_cats }} -->
               <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Latest Posts</li>
-                <li class="list-group-item list-group-item-light">Announcements</li>
-                <li class="list-group-item list-group-item-light">Calendars</li>
-                <li class="list-group-item list-group-item-light">etc</li>
+                {% for cate in dis_cats %}
+                <a href="{{ url_for('posts.cat_post', category=cate) }}"><li class="list-group-item list-group-item-light">{{ cate }}</li></a>
+                {% endfor %}
               </ul>
             </p>
           </div>

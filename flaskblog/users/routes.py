@@ -96,3 +96,5 @@ def user_posts(username):
     for dis_cat in db.session.query(Post.category).distinct():
         dis_cats.append(dis_cat.category)
     return render_template('user_posts.html', posts=posts, user=user, dis_cats=dis_cats)
+
+# updated routes of sidebar

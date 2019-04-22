@@ -34,3 +34,14 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.title}','{self.date_posted}','{self.image_file}','{self.category}')"
+
+class Contact(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    email_id = db.Column(db.String(20), nullable=False)
+    heading = db.Column(db.String(100), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f"Contact('{self.name}','{self.email_id}','{self.heading}','{self.content}','{self.date_posted}')"

@@ -51,12 +51,14 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        # post.category= form.content.category
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('posts.post', post_id=post.id))
     elif request.method == 'GET':
         form.title.data = post.title
         form.content.data = post.content
+        form.category.data  = post.category
     dis_cats = []
     for dis_cat in db.session.query(Post.category).distinct():
         dis_cats.append(dis_cat.category)

@@ -30,6 +30,8 @@
       {% endif %}
     </div>
     <h2 class="article-title">{{ post.title }}</h2>
+    <!-- the image file of the post is displayed here -->
+    <img src="{{ url_for('static',filename='profile_pics/' + post.image_file) }}" alt="" class="responsive" />
     <p class="article-content">{{ post.content }}</p>
   </div>
 </article>

@@ -1,5 +1,5 @@
 {% extends "layout.html" %} {% block content %}
-<h1>Latest News for public!!</h1>
+<h1>Check out the latest news here!!</h1>
 {% for post in posts.items %}
 <article class="media content-section">
   <img
@@ -22,7 +22,8 @@
     <!-- the image file of the post is displayed here -->
     <img src="{{ url_for('static',filename='profile_pics/' + post.image_file) }}" alt="" class="responsive" />
 
-    <p class="article-content">{{ post.content }}</p>
+    <!-- article content is hidden on home page -->
+    <!-- <p class="article-content">{{ post.content }}</p> -->
     
     <h5>Follow up more on this topic  : <a class="" href="{{ url_for('posts.cat_post', category=post.category) }}">{{ post.category }}</a></h5>
     
